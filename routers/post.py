@@ -10,7 +10,6 @@ from sqlalchemy.orm import Session
 from db import db_post
 from db.database import get_db
 from routers.schemas import PostBase, PostDisplay
-from routers.schemas import UserAuth
 
 router = APIRouter(
     prefix='/post',
@@ -27,3 +26,6 @@ def create(request: PostBase, db: Session = Depends(get_db)):
                             detail="Parameter image_url_type can only take values 'absolute' or 'relative'.")
     return db_post.create(db, request)
 
+@router.get('/all', response_model=List[PostDisplay])
+def posts(db: Session = Depends(get_db)):
+  return db_post.get_all(db)
